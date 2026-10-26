@@ -1,0 +1,6 @@
+{
+  "name": "SCGEA - Sistema de Control y Gestión del Ejército Argentino",
+  "description": "Sistema de Control y Gestión institucional del Ejército Argentino para el seguimiento de objetivos, asignación presupuestaria y administración de proyectos.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
