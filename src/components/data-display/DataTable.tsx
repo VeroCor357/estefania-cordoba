@@ -57,7 +57,7 @@ export function DataTable<T extends Record<string, any>>({
   isLoading = false,
   searchPlaceholder = 'Buscar en la tabla...',
   defaultPageSize = 10,
-  pageSizeOptions = [5, 10, 25, 50],
+  pageSizeOptions = [5, 10, 25, 50, 100],
   selectable = false,
   selectedItems = [],
   onSelectionChange,

@@ -9,6 +9,7 @@ import {
   Lock,
 } from 'lucide-react';
 import { Modal } from '../../components/common/Modal';
+import { ConfirmModal } from '../../components/common/ConfirmModal';
 import { Input } from '../../components/common/Input';
 import { Button } from '../../components/common/Button';
 
@@ -51,6 +52,7 @@ export const AdminFunciones: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [pageSize, setPageSize] = useState(10);
   const [modalOpen, setModalOpen] = useState(false);
+  const [funcionToDelete, setFuncionToDelete] = useState<FuncionFila | null>(null);
 
   // Form State
   const [formNombre, setFormNombre] = useState('');
@@ -74,10 +76,8 @@ export const AdminFunciones: React.FC = () => {
     setFormDescripcion('');
   };
 
-  const handleDelete = (id: number) => {
-    if (confirm('¿Está seguro de que desea eliminar esta función?')) {
-      setFunciones((prev) => prev.filter((f) => f.id !== id));
-    }
+  const handleDelete = (item: FuncionFila) => {
+    setFuncionToDelete(item);
   };
 
   const handleToggleMostrar = (id: number) => {
@@ -161,6 +161,7 @@ export const AdminFunciones: React.FC = () => {
                 <option value={10}>10</option>
                 <option value={25}>25</option>
                 <option value={50}>50</option>
+                <option value={100}>100</option>
               </select>
               <ChevronDown className="w-3.5 h-3.5 text-gray-400 absolute right-1.5 top-1/2 -translate-y-1/2 pointer-events-none" />
             </div>
@@ -236,8 +237,8 @@ export const AdminFunciones: React.FC = () => {
 
                       {/* Botón rojo de cruz como en captura */}
                       <button
-                        onClick={() => handleDelete(item.id)}
-                        className="w-6 h-6 rounded bg-[#e74c3c] text-white flex items-center justify-center shadow-2xs hover:opacity-90"
+                        onClick={() => handleDelete(item)}
+                        className="w-6 h-6 rounded bg-[#e74c3c] text-white flex items-center justify-center shadow-2xs hover:opacity-90 cursor-pointer"
                         title="Eliminar"
                       >
                         <X className="w-3.5 h-3.5 stroke-[3]" />
@@ -311,6 +312,37 @@ export const AdminFunciones: React.FC = () => {
           />
         </div>
       </Modal>
+
+      {/* Modal de confirmación para eliminar */}
+      <ConfirmModal
+        isOpen={!!funcionToDelete}
+        onClose={() => setFuncionToDelete(null)}
+        onConfirm={() => {
+          if (funcionToDelete) {
+            setFunciones((prev) => prev.filter((f) => f.id !== funcionToDelete.id));
+            setFuncionToDelete(null);
+          }
+        }}
+        title="¿Desea eliminar esta función?"
+        message={
+          funcionToDelete ? (
+            <div>
+              ¿Está seguro de que desea eliminar la función{' '}
+              <span className="font-bold text-gray-900">
+                "{funcionToDelete.nombre}"
+              </span>
+              ?
+            </div>
+          ) : ''
+        }
+        detail={
+          funcionToDelete
+            ? `Descripción: ${funcionToDelete.descripcion}. Esta acción no se puede deshacer.`
+            : undefined
+        }
+        confirmText="Eliminar"
+        cancelText="Cancelar"
+      />
     </div>
   );
 };

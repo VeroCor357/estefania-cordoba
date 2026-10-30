@@ -260,9 +260,6 @@ export const GestionObjetivosView: React.FC = () => {
           <h1 className="text-xl sm:text-2xl font-black text-[#1e293b] tracking-tight uppercase">
             {selectedDir.fullName}
           </h1>
-          <p className="text-xs text-gray-500 font-medium">
-            Tablero integral de control, ejecución presupuestaria y seguimiento de proyectos
-          </p>
         </div>
 
         <div className="flex items-center gap-2 self-start md:self-auto">
@@ -307,9 +304,6 @@ export const GestionObjetivosView: React.FC = () => {
                 de <strong className="text-white">$ 32.236.372.450,00</strong>
               </span>
             </div>
-            <p className="text-[11px] text-gray-300/80 mt-0.5">
-              Presupuesto total de los objetivos asignados para el ejercicio
-            </p>
           </div>
         </div>
 

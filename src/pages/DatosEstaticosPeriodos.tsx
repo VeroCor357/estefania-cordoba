@@ -11,6 +11,7 @@ import {
   X,
   Calendar,
 } from 'lucide-react';
+import { ConfirmModal } from '../components/common/ConfirmModal';
 
 export interface PeriodoItem {
   id: number;
@@ -93,6 +94,7 @@ export const DatosEstaticosPeriodos: React.FC = () => {
   // Modal State
   const [modalOpen, setModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<PeriodoItem | null>(null);
+  const [itemToDelete, setItemToDelete] = useState<PeriodoItem | null>(null);
   const [formAnio, setFormAnio] = useState<string | number>('');
   const [formTrimestre, setFormTrimestre] = useState('');
   const [formFechaInicio, setFormFechaInicio] = useState('');
@@ -116,10 +118,8 @@ export const DatosEstaticosPeriodos: React.FC = () => {
     setModalOpen(true);
   };
 
-  const handleDelete = (id: number) => {
-    if (confirm('¿Está seguro de que desea eliminar este registro?')) {
-      setPeriodos((prev) => prev.filter((p) => p.id !== id));
-    }
+  const handleDelete = (item: PeriodoItem) => {
+    setItemToDelete(item);
   };
 
   const handleSave = () => {
@@ -236,6 +236,7 @@ export const DatosEstaticosPeriodos: React.FC = () => {
                 <option value={10}>10</option>
                 <option value={25}>25</option>
                 <option value={50}>50</option>
+                <option value={100}>100</option>
               </select>
               <ChevronDown className="w-3.5 h-3.5 text-gray-400 absolute right-1.5 top-1/2 -translate-y-1/2 pointer-events-none" />
             </div>
@@ -332,8 +333,8 @@ export const DatosEstaticosPeriodos: React.FC = () => {
 
                       {/* Botón Eliminar Rojo como en captura */}
                       <button
-                        onClick={() => handleDelete(item.id)}
-                        className="w-6 h-6 rounded bg-[#e15b49] hover:bg-[#cb4d3c] text-white flex items-center justify-center shadow-2xs transition"
+                        onClick={() => handleDelete(item)}
+                        className="w-6 h-6 rounded bg-[#e15b49] hover:bg-[#cb4d3c] text-white flex items-center justify-center shadow-2xs transition cursor-pointer"
                         title="Eliminar Periodo"
                       >
                         <Trash2 className="w-3 h-3 stroke-[2.5]" />
@@ -477,6 +478,37 @@ export const DatosEstaticosPeriodos: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* Modal de confirmación para eliminar */}
+      <ConfirmModal
+        isOpen={!!itemToDelete}
+        onClose={() => setItemToDelete(null)}
+        onConfirm={() => {
+          if (itemToDelete) {
+            setPeriodos((prev) => prev.filter((p) => p.id !== itemToDelete.id));
+            setItemToDelete(null);
+          }
+        }}
+        title="¿Desea eliminar este periodo?"
+        message={
+          itemToDelete ? (
+            <div>
+              ¿Está seguro de que desea eliminar el registro de{' '}
+              <span className="font-bold text-gray-900">
+                {itemToDelete.trimestre} ({itemToDelete.anio})
+              </span>
+              ?
+            </div>
+          ) : ''
+        }
+        detail={
+          itemToDelete
+            ? `Vigencia: ${itemToDelete.fechaInicio} al ${itemToDelete.fechaFin}. Esta acción no se puede deshacer.`
+            : undefined
+        }
+        confirmText="Eliminar"
+        cancelText="Cancelar"
+      />
     </div>
   );
 };

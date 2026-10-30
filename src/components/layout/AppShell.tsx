@@ -12,7 +12,6 @@ import {
   ChevronRight,
   Menu,
   X,
-  Calendar,
   User,
 } from 'lucide-react';
 
@@ -83,13 +82,8 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
           </div>
         </div>
 
-        {/* Info Derecha: Año Operativo y Usuario */}
+        {/* Info Derecha: Usuario */}
         <div className="flex items-center gap-3 sm:gap-5 text-xs">
-          <div className="hidden sm:flex items-center gap-1.5 text-gray-300 font-medium">
-            <Calendar className="w-3.5 h-3.5 text-emerald-400" />
-            <span>Año Operativo 2026</span>
-          </div>
-
           {/* User Oval Pill como en la captura */}
           <div className="flex items-center gap-2 bg-[#092b1a] border border-emerald-600/40 rounded-full py-1 px-3 shadow-xs">
             <div className="w-5 h-5 rounded-full bg-emerald-700 flex items-center justify-center text-emerald-200">

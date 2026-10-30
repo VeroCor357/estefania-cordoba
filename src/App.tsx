@@ -6,6 +6,8 @@ import { GestionObjetivosView } from './pages/GestionObjetivosView';
 import { DashboardDGIyD } from './pages/DashboardDGIyD';
 import { GeneracionObjetivos } from './pages/GeneracionObjetivos';
 import { NuevoObjetivoWizard } from './pages/NuevoObjetivoWizard';
+import { EditarObjetivoView } from './pages/EditarObjetivoView';
+import { DetalleActividadesObjetivo } from './pages/DetalleActividadesObjetivo';
 import { AsignacionPresupuestaria } from './pages/AsignacionPresupuestaria';
 import { InformacionProyectos } from './pages/InformacionProyectos';
 import { AdminUsuarios } from './pages/admin/AdminUsuarios';
@@ -29,6 +31,10 @@ export default function App() {
           <Route path="/dashboard-dgiyd" element={<DashboardDGIyD />} />
           <Route path="/generacion-objetivos" element={<GeneracionObjetivos />} />
           <Route path="/generacion-objetivos/nuevo" element={<NuevoObjetivoWizard />} />
+          <Route path="/generacion-objetivos/editar/:id" element={<EditarObjetivoView />} />
+          <Route path="/generacion-objetivos/editar" element={<EditarObjetivoView />} />
+          <Route path="/generacion-objetivos/actividades/:id" element={<DetalleActividadesObjetivo />} />
+          <Route path="/generacion-objetivos/actividades" element={<DetalleActividadesObjetivo />} />
           <Route path="/asignacion-presupuestaria" element={<AsignacionPresupuestaria />} />
           <Route path="/proyectos" element={<InformacionProyectos />} />
           <Route path="/admin/usuarios" element={<AdminUsuarios />} />

@@ -11,6 +11,7 @@ import {
   ChevronDown,
 } from 'lucide-react';
 import { Modal } from '../../components/common/Modal';
+import { ConfirmModal } from '../../components/common/ConfirmModal';
 import { Input } from '../../components/common/Input';
 import { Select } from '../../components/common/Select';
 import { Button } from '../../components/common/Button';
@@ -116,6 +117,7 @@ export const AdminUsuarios: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [pageSize, setPageSize] = useState(10);
   const [modalOpen, setModalOpen] = useState(false);
+  const [userToDelete, setUserToDelete] = useState<UsuarioFila | null>(null);
 
   // Form State
   const [formUsuario, setFormUsuario] = useState('');
@@ -141,10 +143,8 @@ export const AdminUsuarios: React.FC = () => {
     setModalOpen(false);
   };
 
-  const handleDelete = (id: number) => {
-    if (confirm('¿Está seguro de que desea eliminar este usuario?')) {
-      setUsuarios((prev) => prev.filter((u) => u.id !== id));
-    }
+  const handleDelete = (item: UsuarioFila) => {
+    setUserToDelete(item);
   };
 
   const filteredData = useMemo(() => {
@@ -204,6 +204,7 @@ export const AdminUsuarios: React.FC = () => {
                 <option value={10}>10</option>
                 <option value={25}>25</option>
                 <option value={50}>50</option>
+                <option value={100}>100</option>
               </select>
               <ChevronDown className="w-3.5 h-3.5 text-gray-400 absolute right-1.5 top-1/2 -translate-y-1/2 pointer-events-none" />
             </div>
@@ -299,8 +300,8 @@ export const AdminUsuarios: React.FC = () => {
 
                         {/* Rojo: Eliminar */}
                         <button
-                          onClick={() => handleDelete(item.id)}
-                          className="w-5 h-5 rounded bg-[#e74c3c] text-white flex items-center justify-center hover:opacity-90 shadow-2xs"
+                          onClick={() => handleDelete(item)}
+                          className="w-5 h-5 rounded bg-[#e74c3c] text-white flex items-center justify-center hover:opacity-90 shadow-2xs cursor-pointer"
                           title="Eliminar"
                         >
                           <Trash2 className="w-3 h-3 stroke-[2.5]" />
@@ -414,6 +415,37 @@ export const AdminUsuarios: React.FC = () => {
           />
         </div>
       </Modal>
+
+      {/* Modal de confirmación para eliminar */}
+      <ConfirmModal
+        isOpen={!!userToDelete}
+        onClose={() => setUserToDelete(null)}
+        onConfirm={() => {
+          if (userToDelete) {
+            setUsuarios((prev) => prev.filter((u) => u.id !== userToDelete.id));
+            setUserToDelete(null);
+          }
+        }}
+        title="¿Desea eliminar este usuario?"
+        message={
+          userToDelete ? (
+            <div>
+              ¿Está seguro de que desea eliminar al usuario{' '}
+              <span className="font-bold text-gray-900">
+                {userToDelete.usuario}
+              </span>{' '}
+              ({userToDelete.apellido}, {userToDelete.nombre})?
+            </div>
+          ) : ''
+        }
+        detail={
+          userToDelete
+            ? `DNI: ${userToDelete.nroDocumento} - Rol: ${userToDelete.roles}. Esta acción no se puede deshacer.`
+            : undefined
+        }
+        confirmText="Eliminar"
+        cancelText="Cancelar"
+      />
     </div>
   );
 };

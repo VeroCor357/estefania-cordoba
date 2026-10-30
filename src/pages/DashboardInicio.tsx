@@ -259,8 +259,7 @@ export const DashboardInicio: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1.5 bg-white border border-gray-300 rounded px-2.5 py-1 text-xs shadow-2xs">
-            <span className="text-gray-500 font-medium">EJERCICIO:</span>
+          <div className="flex items-center bg-white border border-gray-300 rounded px-2.5 py-1 text-xs shadow-2xs">
             <select
               value={ejercicio}
               onChange={(e) => setEjercicio(e.target.value)}

@@ -8,6 +8,7 @@ import {
   Trash2,
 } from 'lucide-react';
 import { Modal } from '../../components/common/Modal';
+import { ConfirmModal } from '../../components/common/ConfirmModal';
 import { Input } from '../../components/common/Input';
 import { Button } from '../../components/common/Button';
 
@@ -23,6 +24,7 @@ export const AdminRoles: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [pageSize, setPageSize] = useState(10);
   const [modalOpen, setModalOpen] = useState(false);
+  const [roleToDelete, setRoleToDelete] = useState<RolFila | null>(null);
   const [formNombre, setFormNombre] = useState('');
   const [formDescripcion, setFormDescripcion] = useState('');
 
@@ -42,10 +44,8 @@ export const AdminRoles: React.FC = () => {
     setFormDescripcion('');
   };
 
-  const handleDelete = (id: number) => {
-    if (confirm('¿Está seguro de que desea eliminar este rol?')) {
-      setRoles((prev) => prev.filter((r) => r.id !== id));
-    }
+  const handleDelete = (item: RolFila) => {
+    setRoleToDelete(item);
   };
 
   const filteredData = useMemo(() => {
@@ -111,6 +111,7 @@ export const AdminRoles: React.FC = () => {
                 <option value={10}>10</option>
                 <option value={25}>25</option>
                 <option value={50}>50</option>
+                <option value={100}>100</option>
               </select>
               <ChevronDown className="w-3.5 h-3.5 text-gray-400 absolute right-1.5 top-1/2 -translate-y-1/2 pointer-events-none" />
             </div>
@@ -177,8 +178,8 @@ export const AdminRoles: React.FC = () => {
                           <Edit2 className="w-3 h-3 stroke-[2.5]" />
                         </button>
                         <button
-                          onClick={() => handleDelete(item.id)}
-                          className="w-6 h-6 rounded bg-[#e74c3c] text-white flex items-center justify-center shadow-2xs hover:opacity-90"
+                          onClick={() => handleDelete(item)}
+                          className="w-6 h-6 rounded bg-[#e74c3c] text-white flex items-center justify-center shadow-2xs hover:opacity-90 cursor-pointer"
                         >
                           <Trash2 className="w-3 h-3 stroke-[2.5]" />
                         </button>
@@ -266,6 +267,37 @@ export const AdminRoles: React.FC = () => {
           />
         </div>
       </Modal>
+
+      {/* Modal de confirmación para eliminar */}
+      <ConfirmModal
+        isOpen={!!roleToDelete}
+        onClose={() => setRoleToDelete(null)}
+        onConfirm={() => {
+          if (roleToDelete) {
+            setRoles((prev) => prev.filter((r) => r.id !== roleToDelete.id));
+            setRoleToDelete(null);
+          }
+        }}
+        title="¿Desea eliminar este rol?"
+        message={
+          roleToDelete ? (
+            <div>
+              ¿Está seguro de que desea eliminar el rol{' '}
+              <span className="font-bold text-gray-900">
+                "{roleToDelete.nombre}"
+              </span>
+              ?
+            </div>
+          ) : ''
+        }
+        detail={
+          roleToDelete
+            ? `Descripción: ${roleToDelete.descripcion || 'Sin descripción'}. Esta acción no se puede deshacer.`
+            : undefined
+        }
+        confirmText="Eliminar"
+        cancelText="Cancelar"
+      />
     </div>
   );
 };

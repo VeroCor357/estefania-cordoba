@@ -13,24 +13,102 @@ import {
   Trash2,
   Filter,
 } from 'lucide-react';
-import { Modal } from '../components/common/Modal';
-import { Input } from '../components/common/Input';
-import { Select } from '../components/common/Select';
-import { Button } from '../components/common/Button';
+import { ConfirmModal } from '../components/common/ConfirmModal';
+import { ModalResumenAnexo03 } from '../components/proyectos/ModalResumenAnexo03';
+import { ModalCrearProyecto } from '../components/proyectos/ModalCrearProyecto';
 
-interface ProyectoFila {
+export interface ProyectoFila {
   id: number;
   nombre: string;
   jefeProyecto: string;
   asesorTecnico: string;
   asesorOperativo: string;
   descripcion: string;
+  distribucionEfectos?: string;
+  observaciones?: string;
   nivelMadurez: number | null;
   tipoProyecto: 'Finalizado' | 'Archivados' | 'Con Financiamiento' | 'En Estudio';
   porcentaje: number;
 }
 
 const mockProyectosTable: ProyectoFila[] = [
+  {
+    id: 101,
+    nombre: 'Radar Táctico de defensa Antiaérea RMF 200V',
+    jefeProyecto: 'CR VILLALBA',
+    asesorTecnico: 'CR VILLALBA',
+    asesorOperativo: 'MY DIAZ',
+    descripcion: 'Sistema de radar táctico móvil 3D para vigilancia aérea',
+    nivelMadurez: 7,
+    tipoProyecto: 'Con Financiamiento',
+    porcentaje: 65,
+  },
+  {
+    id: 102,
+    nombre: 'SKUA - UGV ANTÁRTICO',
+    jefeProyecto: 'MY MORALES',
+    asesorTecnico: 'MY MORALES',
+    asesorOperativo: 'SG BAPTISTA',
+    descripcion: 'Vehículo terrestre no tripulado para operaciones en clima extremo antártico',
+    nivelMadurez: 8,
+    tipoProyecto: 'Con Financiamiento',
+    porcentaje: 82,
+  },
+  {
+    id: 103,
+    nombre: 'UGV PLATAFORMA MULTIPROPÓSITO',
+    jefeProyecto: 'CT TERAN',
+    asesorTecnico: 'CT TERAN',
+    asesorOperativo: 'CI MENDOZA',
+    descripcion: 'Plataforma terrestre robótica autónoma modular',
+    nivelMadurez: 6,
+    tipoProyecto: 'Con Financiamiento',
+    porcentaje: 54,
+  },
+  {
+    id: 104,
+    nombre: 'UGV MULTIPROPÓSITO (UGV PM EA1)',
+    jefeProyecto: 'CT TERAN',
+    asesorTecnico: 'CT TERAN',
+    asesorOperativo: 'CI MENDOZA',
+    descripcion: 'Prototipo avanzado EA1 de vehículo no tripulado de apoyo logístico y táctico',
+    nivelMadurez: 7,
+    tipoProyecto: 'Con Financiamiento',
+    porcentaje: 70,
+  },
+  {
+    id: 105,
+    nombre: 'SISTEMA DE IZAMIENTO PARA VC TAM',
+    jefeProyecto: 'MY BALESTRINI',
+    asesorTecnico: 'TC FERRERO',
+    asesorOperativo: 'MY BALESTRINI',
+    descripcion: 'Mecanismo hidráulico de izamiento y extracción de torre/motor para Tanque Argentino Mediano',
+    nivelMadurez: 9,
+    tipoProyecto: 'Finalizado',
+    porcentaje: 100,
+  },
+  {
+    id: 106,
+    nombre: 'MODERNIZACIÓN DE LOS VCTP',
+    jefeProyecto: 'TC FERRERO',
+    asesorTecnico: 'TC FERRERO',
+    asesorOperativo: 'CR VILLALBA',
+    descripcion: 'Actualización optrónica, comunicaciones y planta motriz para Vehículo de Combate Transporte Personal',
+    nivelMadurez: 8,
+    tipoProyecto: 'Con Financiamiento',
+    porcentaje: 78,
+  },
+  {
+    id: 107,
+    nombre: 'SATAC',
+    jefeProyecto: 'CR VILLALBA',
+    asesorTecnico: 'CR VILLALBA',
+    asesorOperativo: 'MY DIAZ',
+    descripcion: 'Sistema Automatizado de Tiro de Artillería de Campaña',
+    nivelMadurez: 8,
+    tipoProyecto: 'Con Financiamiento',
+    porcentaje: 88,
+  },
   {
     id: 1,
     nombre: 'SIMCAP',
@@ -40,39 +118,6 @@ const mockProyectosTable: ProyectoFila[] = [
     descripcion: 'Simulador de Cargas Pesadas',
     nivelMadurez: 9,
     tipoProyecto: 'Archivados',
-    porcentaje: 2,
-  },
-  {
-    id: 2,
-    nombre: 'ADAPTACION PARA MORTERO CAL 120MM PARA M106',
-    jefeProyecto: 'DIGID',
-    asesorTecnico: '',
-    asesorOperativo: '',
-    descripcion: '',
-    nivelMadurez: null,
-    tipoProyecto: 'Archivados',
-    porcentaje: 0,
-  },
-  {
-    id: 3,
-    nombre: 'BIO-DIESEL',
-    jefeProyecto: 'DIGID',
-    asesorTecnico: '',
-    asesorOperativo: '',
-    descripcion: '',
-    nivelMadurez: null,
-    tipoProyecto: 'Archivados',
-    porcentaje: 0,
-  },
-  {
-    id: 4,
-    nombre: 'CAMIONES VUG MB 1720 4X4 Y 4X2',
-    jefeProyecto: 'DIGID',
-    asesorTecnico: '',
-    asesorOperativo: '',
-    descripcion: '',
-    nivelMadurez: null,
-    tipoProyecto: 'Archivados',
     porcentaje: 100,
   },
   {
@@ -81,7 +126,7 @@ const mockProyectosTable: ProyectoFila[] = [
     jefeProyecto: 'MY MORALES',
     asesorTecnico: 'MY MORALES',
     asesorOperativo: 'SG BAPTISTA',
-    descripcion: 'Contemplo el diseño y adqu...',
+    descripcion: 'Contempló el diseño y adquisición balística',
     nivelMadurez: 9,
     tipoProyecto: 'Finalizado',
     porcentaje: 95,
@@ -92,7 +137,7 @@ const mockProyectosTable: ProyectoFila[] = [
     jefeProyecto: 'MY MORALES',
     asesorTecnico: 'MY MORALES',
     asesorOperativo: 'SG BAPTISTA',
-    descripcion: 'Sistema logístico remolcado...',
+    descripcion: 'Sistema logístico remolcado de cocción y racionamiento',
     nivelMadurez: 7,
     tipoProyecto: 'Archivados',
     porcentaje: 95,
@@ -103,7 +148,7 @@ const mockProyectosTable: ProyectoFila[] = [
     jefeProyecto: 'MY MORALES',
     asesorTecnico: 'MY MORALES',
     asesorOperativo: 'SG BAPTISTA',
-    descripcion: 'Plataforma de apoyo táctico...',
+    descripcion: 'Plataforma de apoyo táctico y racionamiento autónomo',
     nivelMadurez: 7,
     tipoProyecto: 'Archivados',
     porcentaje: 95,
@@ -114,10 +159,10 @@ const mockProyectosTable: ProyectoFila[] = [
     jefeProyecto: 'DIGID',
     asesorTecnico: '',
     asesorOperativo: '',
-    descripcion: 'El Lanzacohetes Múltiple C...',
-    nivelMadurez: null,
+    descripcion: 'El Lanzacohetes Múltiple Calibre 127mm',
+    nivelMadurez: 9,
     tipoProyecto: 'Archivados',
-    porcentaje: 0,
+    porcentaje: 100,
   },
 ];
 
@@ -129,16 +174,15 @@ export const InformacionProyectos: React.FC = () => {
   const [pageSize, setPageSize] = useState(10);
   const [modalOpen, setModalOpen] = useState(false);
   const [resumenOpen, setResumenOpen] = useState(false);
+  const [projectToDelete, setProjectToDelete] = useState<ProyectoFila | null>(null);
 
-  // Form State
-  const [formNombre, setFormNombre] = useState('');
-  const [formJefe, setFormJefe] = useState('');
-  const [formTecnico, setFormTecnico] = useState('');
-  const [formOperativo, setFormOperativo] = useState('');
-  const [formDescripcion, setFormDescripcion] = useState('');
-  const [formNivel, setFormNivel] = useState<number | null>(7);
-  const [formTipo, setFormTipo] = useState<ProyectoFila['tipoProyecto']>('Archivados');
-  const [formPorcentaje, setFormPorcentaje] = useState(50);
+  const handleGuardarNuevo = (datos: Omit<ProyectoFila, 'id'>) => {
+    const nuevo: ProyectoFila = {
+      id: Date.now(),
+      ...datos,
+    };
+    setProyectos((prev) => [nuevo, ...prev]);
+  };
 
   const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.checked) {
@@ -154,31 +198,8 @@ export const InformacionProyectos: React.FC = () => {
     );
   };
 
-  const handleCrear = () => {
-    if (!formNombre.trim()) {
-      alert('Por favor ingrese el nombre del proyecto.');
-      return;
-    }
-    const nuevo: ProyectoFila = {
-      id: Date.now(),
-      nombre: formNombre,
-      jefeProyecto: formJefe,
-      asesorTecnico: formTecnico,
-      asesorOperativo: formOperativo,
-      descripcion: formDescripcion,
-      nivelMadurez: formNivel,
-      tipoProyecto: formTipo,
-      porcentaje: formPorcentaje,
-    };
-    setProyectos((prev) => [nuevo, ...prev]);
-    setModalOpen(false);
-    setFormNombre('');
-  };
-
-  const handleDelete = (id: number) => {
-    if (confirm('¿Está seguro de que desea eliminar este proyecto?')) {
-      setProyectos((prev) => prev.filter((p) => p.id !== id));
-    }
+  const handleDelete = (item: ProyectoFila) => {
+    setProjectToDelete(item);
   };
 
   const filteredData = useMemo(() => {
@@ -224,7 +245,7 @@ export const InformacionProyectos: React.FC = () => {
             </button>
 
             <button
-              onClick={() => navigate('/generacion-objetivos/nuevo')}
+              onClick={() => setModalOpen(true)}
               className="flex items-center gap-1.5 px-4 py-2 rounded-md bg-[#00a8e8] hover:bg-[#0096d1] text-white font-bold text-xs tracking-wide shadow-2xs transition cursor-pointer"
             >
               <Plus className="w-4 h-4 stroke-[2.5]" />
@@ -246,6 +267,7 @@ export const InformacionProyectos: React.FC = () => {
                 <option value={10}>10</option>
                 <option value={25}>25</option>
                 <option value={50}>50</option>
+                <option value={100}>100</option>
               </select>
               <ChevronDown className="w-3.5 h-3.5 text-gray-400 absolute right-1.5 top-1/2 -translate-y-1/2 pointer-events-none" />
             </div>
@@ -389,8 +411,8 @@ export const InformacionProyectos: React.FC = () => {
 
                       {/* 6. Rojo: Eliminar */}
                       <button
-                        onClick={() => handleDelete(item.id)}
-                        className="w-5 h-5 rounded bg-[#e15b49] text-white flex items-center justify-center hover:opacity-90 shadow-2xs"
+                        onClick={() => handleDelete(item)}
+                        className="w-5 h-5 rounded bg-[#e15b49] text-white flex items-center justify-center hover:opacity-90 shadow-2xs cursor-pointer"
                         title="Eliminar"
                       >
                         <Trash2 className="w-3 h-3 stroke-[2.5]" />
@@ -421,126 +443,50 @@ export const InformacionProyectos: React.FC = () => {
         </div>
       </div>
 
-      {/* Modal Resumen General */}
-      <Modal
+      {/* Modal Resumen General (Anexo 03) con diseño idéntico a la captura */}
+      <ModalResumenAnexo03
         isOpen={resumenOpen}
         onClose={() => setResumenOpen(false)}
-        title="Resumen General del Portafolio de Proyectos"
-        subtitle="Consolidado de iniciativas I+D y estado de desarrollo"
-        maxWidth="lg"
-        footer={
-          <Button variant="secondary" size="sm" onClick={() => setResumenOpen(false)}>
-            Cerrar
-          </Button>
-        }
-      >
-        <div className="space-y-4 text-xs">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <div className="p-3 bg-gray-50 rounded border border-gray-200 text-center">
-              <span className="text-gray-500 font-medium block">Total Proyectos</span>
-              <span className="text-xl font-bold text-gray-900 mt-1 block">{proyectos.length}</span>
-            </div>
-            <div className="p-3 bg-emerald-50 rounded border border-emerald-200 text-center">
-              <span className="text-emerald-800 font-medium block">Finalizados</span>
-              <span className="text-xl font-bold text-emerald-900 mt-1 block">
-                {proyectos.filter((p) => p.tipoProyecto === 'Finalizado').length}
-              </span>
-            </div>
-            <div className="p-3 bg-amber-50 rounded border border-amber-200 text-center">
-              <span className="text-amber-800 font-medium block">Archivados</span>
-              <span className="text-xl font-bold text-amber-900 mt-1 block">
-                {proyectos.filter((p) => p.tipoProyecto === 'Archivados').length}
-              </span>
-            </div>
-            <div className="p-3 bg-sky-50 rounded border border-sky-200 text-center">
-              <span className="text-sky-800 font-medium block">TRL Promedio</span>
-              <span className="text-xl font-bold text-sky-900 mt-1 block">8 / 9</span>
-            </div>
-          </div>
-        </div>
-      </Modal>
+        proyectosDisponibles={proyectos}
+      />
 
-      {/* Modal Nuevo Proyecto */}
-      <Modal
+      {/* Modal Crear Proyecto con diseño idéntico a las capturas */}
+      <ModalCrearProyecto
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
-        title="Nuevo Proyecto Tecnológico"
-        subtitle="Alta de iniciativa en el catálogo general"
-        maxWidth="md"
-        footer={
-          <div className="flex gap-2">
-            <Button variant="secondary" size="sm" onClick={() => setModalOpen(false)}>
-              Cancelar
-            </Button>
-            <button
-              onClick={handleCrear}
-              className="px-4 py-2 bg-[#00a8e8] hover:bg-[#0096d1] text-white font-bold text-xs rounded-md shadow-xs transition"
-            >
-              Guardar Proyecto
-            </button>
-          </div>
+        onGuardar={handleGuardarNuevo}
+      />
+
+      {/* Modal de confirmación para eliminar */}
+      <ConfirmModal
+        isOpen={!!projectToDelete}
+        onClose={() => setProjectToDelete(null)}
+        onConfirm={() => {
+          if (projectToDelete) {
+            setProyectos((prev) => prev.filter((p) => p.id !== projectToDelete.id));
+            setProjectToDelete(null);
+          }
+        }}
+        title="¿Desea eliminar este proyecto?"
+        message={
+          projectToDelete ? (
+            <div>
+              ¿Está seguro de que desea eliminar el proyecto{' '}
+              <span className="font-bold text-gray-900">
+                "{projectToDelete.nombre}"
+              </span>
+              ?
+            </div>
+          ) : ''
         }
-      >
-        <div className="space-y-4 text-xs">
-          <Input
-            label="Nombre del Proyecto *"
-            placeholder="Ej.: SIMCAP"
-            value={formNombre}
-            onChange={(e) => setFormNombre(e.target.value)}
-          />
-
-          <div className="grid grid-cols-2 gap-3">
-            <Input
-              label="Jefe de Proyecto"
-              placeholder="CT TERAN"
-              value={formJefe}
-              onChange={(e) => setFormJefe(e.target.value)}
-            />
-            <Input
-              label="Asesor Técnico"
-              placeholder="CT TERAN"
-              value={formTecnico}
-              onChange={(e) => setFormTecnico(e.target.value)}
-            />
-          </div>
-
-          <Input
-            label="Asesor Operativo"
-            placeholder="CI MENDOZA"
-            value={formOperativo}
-            onChange={(e) => setFormOperativo(e.target.value)}
-          />
-
-          <Input
-            label="Descripción Corta"
-            placeholder="Simulador de Cargas Pesadas..."
-            value={formDescripcion}
-            onChange={(e) => setFormDescripcion(e.target.value)}
-          />
-
-          <div className="grid grid-cols-2 gap-3">
-            <Select
-              label="Tipo de Proyecto"
-              value={formTipo}
-              onChange={(e) => setFormTipo(e.target.value as ProyectoFila['tipoProyecto'])}
-              options={[
-                { value: 'Archivados', label: 'Archivados' },
-                { value: 'Finalizado', label: 'Finalizado' },
-                { value: 'Con Financiamiento', label: 'Con Financiamiento' },
-                { value: 'En Estudio', label: 'En Estudio' },
-              ]}
-            />
-            <Input
-              label="Nivel de Madurez (TRL 1-9)"
-              type="number"
-              min={1}
-              max={9}
-              value={formNivel || 1}
-              onChange={(e) => setFormNivel(Number(e.target.value))}
-            />
-          </div>
-        </div>
-      </Modal>
+        detail={
+          projectToDelete
+            ? `Jefe de Proyecto: ${projectToDelete.jefeProyecto || 'No asignado'}. Esta acción no se puede deshacer.`
+            : undefined
+        }
+        confirmText="Eliminar"
+        cancelText="Cancelar"
+      />
     </div>
   );
 };
